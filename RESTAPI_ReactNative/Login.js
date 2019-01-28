@@ -4,7 +4,6 @@ import { AuthSession } from 'expo';
 
 const URL = 'http://192.168.25.56:3000/'
 const SF_OAUTH_URL = 'auth/github/callback';
-const CLIENT_KEY = '0b660c51e02ff09b2175'
 
 export default class Login extends Component {
   static navigationOptions = {
@@ -20,11 +19,7 @@ export default class Login extends Component {
     const redirectUrl = AuthSession.getRedirectUrl();
     console.log(redirectUrl);
     const result = await AuthSession.startAsync({
-      authUrl:
-        `${URL}${SF_OAUTH_URL}` +
-        `?response_type=token` +
-        `&client_id=${CLIENT_KEY}` +
-        `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+      authUrl: `${URL}${SF_OAUTH_URL}`
     });
     const { type, errorCode = 'You cancel or dismissed the login' } = result;
     if (type === 'success') {

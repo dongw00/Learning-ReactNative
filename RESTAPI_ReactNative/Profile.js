@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 
 const URL = 'http://192.168.25.56:3000';
-// const ACC_TOKEN = '1EWk4BSDjm2ma5EBKSqnvnomoRGWDjGvlVcVQkguLP8Rrmlqi9IcaDg0RtXIS6KM';
+//const ACC_TOKEN = 'xxx';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -91,7 +91,7 @@ export default class Profile extends React.Component {
   }
 
   _getItem = () => {
-    fetch(`${URL}/api/Trader`, {
+    fetch(`${URL}/api/Trader?access_token=${ACC_TOKEN}`, {
       method: 'GET'
     })
       .then(res => res.json())
