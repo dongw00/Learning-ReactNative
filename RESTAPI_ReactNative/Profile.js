@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, StatusBar } from 'react-native';
 
-const URL = 'http://192.168.25.56:3000';
+const URL = 'http://192.168.0.3:3000';
 //const ACC_TOKEN = 'xxx';
 
 export default class Profile extends React.Component {
@@ -9,15 +9,17 @@ export default class Profile extends React.Component {
     super(props);
     this.state = {
       posting: false,
-      tradeId: '',
-      firstName: '',
-      lastName: ''
+      vin: '',
+      manufacturer: '',
+      model: '',
+      year: ''
     }
   }
 
   render() {
     return (
       <View stlye={styles.container}>
+        <StatusBar hidden={true} />
         <Text style={styles.text}>Welcome to React world!</Text>
         <Text style={styles.subTitle}>😀Composer REST API TEST😀</Text>
         <View style={styles.contentBox}>
@@ -35,10 +37,10 @@ export default class Profile extends React.Component {
                 flex: 1,
                 height: '100%',
               }}
-              placeholder="tradeId"
+              placeholder="vin"
               onChangeText={(text) => {
                 this.setState({
-                  tradeId: text
+                  vin: text
                 });
               }}
             />
@@ -47,10 +49,10 @@ export default class Profile extends React.Component {
                 flex: 1,
                 height: '100%',
               }}
-              placeholder="firstName"
+              placeholder="manufacturer"
               onChangeText={(text) => {
                 this.setState({
-                  firstName: text
+                  manufacturer: text
                 });
               }}
             />
@@ -59,10 +61,22 @@ export default class Profile extends React.Component {
                 flex: 1,
                 height: '100%',
               }}
-              placeholder="lastName"
+              placeholder="model"
               onChangeText={(text) => {
                 this.setState({
-                  lastName: text
+                  model: text
+                });
+              }}
+            />
+            <TextInput
+              style={{
+                flex: 1,
+                height: '100%',
+              }}
+              placeholder="year"
+              onChangeText={(text) => {
+                this.setState({
+                  year: text
                 });
               }}
             />
@@ -72,9 +86,10 @@ export default class Profile extends React.Component {
           </View>
         ) : (
             <View style={styles.result}>
-              <Text>tradeId : {this.state.tradeId}</Text>
-              <Text>firstName : {this.state.firstName}</Text>
-              <Text>lastName : {this.state.lastName}</Text>
+              <Text>vin : {this.state.vin}</Text>
+              <Text>manufacturer : {this.state.manufacturer}</Text>
+              <Text>model : {this.state.model}</Text>
+              <Text>year : {this.state.year}</Text>
             </View>
           )}
       </View>
@@ -84,22 +99,24 @@ export default class Profile extends React.Component {
   _toggle = () => {
     this.setState({
       posting: true,
-      tradeId: '',
-      firstName: '',
-      lastName: ''
+      vin: '',
+      manufacturer: '',
+      model: '',
+      year: ''
     })
   }
 
   _getItem = () => {
-    fetch(`${URL}/api/Trader?access_token=${ACC_TOKEN}`, {
+    fetch(`${URL}/api/Vehicle`, {
       method: 'GET'
     })
       .then(res => res.json())
       .then(data => {
         this.setState({
-          tradeId: data[0].tradeId,
-          firstName: data[0].firstName,
-          lastName: data[0].lastName
+          vin: data[0].vin,
+          manufacturer: data[0].manufacturer,
+          model: data[0].model,
+          year: data[0].year
         })
       })
       .catch(error => {
@@ -109,13 +126,15 @@ export default class Profile extends React.Component {
 
   _postItem = () => {
     const data = {
-      "$class": "org.example.trading.Trader",
-      "tradeId": this.state.tradeId,
-      "firstName": this.state.firstName,
-      "lastName": this.state.lastName
+      "$class": "org.acme.vehicle.auction.Vehicle",
+      "vin": this.state.vin,
+      "manufacturer": this.state.manufacturer,
+      "model": this.state.model,
+      "year": this.state.year,
+      "owner": "resource:org.acme.vehicle.auction.Member#6494"
     }
     console.log(data);
-    fetch(`${URL}/api/Trader`, {
+    fetch(`${URL}/api/Vehicle`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -152,12 +171,14 @@ const styles = StyleSheet.create({
   },
   result: {
     flex: 1,
-    marginTop: 30,
+    marginTop: 45,
     justifyContent: 'center',
     alignSelf: 'center'
   },
   marginR: {
-    marginTop: 10
+    width: '95%',
+    marginLeft: 13,
+    marginTop: 15,
   },
   inputContainer: {
     height: 50,
